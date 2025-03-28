@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kakarrrotto PM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* 去掉默认样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      font-family: 'Orbitron', sans-serif;
+      background: black;
+      overflow: hidden;
+    }
+
+    /* 动态背景 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(270deg, #03dac6, #6200ee, #ff0266, #03dac6);
+      background-size: 800% 800%;
+      animation: gradientFlow 20s linear infinite;
+      z-index: -2;
+      opacity: 0.3;
+    }
+
+    /* 模糊遮罩 */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      backdrop-filter: blur(4px);
+      z-index: -1;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* 中心内容 */
+    .container {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title {
+      font-size: 4rem;
+      color: #fff;
+      text-shadow: 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
+      animation: pulse 3s infinite;
+      letter-spacing: 5px;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        text-shadow: 0 0 20px #0ff, 0 0 40px #0ff, 0 0 80px #0ff;
+      }
+      50% {
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff;
+      }
+    }
+
+    /* 加载动效或者进入按钮可以在这里加上 */
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">Kakarrrotto PM</h1>
+  </div>
+
+</body>
+</html>
