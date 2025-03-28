@@ -6,13 +6,11 @@
   <title>Kakarrrotto PM</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
   <style>
-    /* 基础样式重置 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body, html {
       height: 100%;
       width: 100%;
@@ -20,57 +18,205 @@
       font-family: 'Orbitron', sans-serif;
     }
 
-    /* 视频背景 */
     .video-bg {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover; /* 自动调整视频比例以覆盖整个背景 */
-      z-index: -2; /* 视频背景置于最底层 */
+      object-fit: cover;
+      z-index: -2;
     }
 
-    /* 未使用遮罩，让视频保持原来的亮度 */
-
-    /* 中央文字容器 */
     .container {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       text-align: center;
-      color: #1d1d1d; /* 深色字体颜色，更简约现代 */
-      z-index: 1; /* 确保内容在视频之上 */
+      color: #1d1d1d;
+      z-index: 1;
     }
 
-    /* 标题文字 */
     .title {
-      font-size: 4rem; /* 合适的文字大小 */
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 6px;
+      font-size: 4rem;
+      margin-bottom: 2rem;
     }
 
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.5rem; /* 小屏幕优化 */
-      }
+    /* 按钮样式 */
+    .button {
+      margin: 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      color: #fff;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    /* 弹出提示框样式 */
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      color: #333;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0px 6px 18px rgba(0,0,0,0.2);
+      z-index: 2;
+      display: none; /* 默认隐藏 */
+    }
+
+    /* 背景遮罩层 */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+      display: none; /* 默认隐藏 */
+    }
+
+    /* 留言弹框 */
+    .message-box {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      color: #333;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0px 6px 18px rgba(0,0,0,0.2);
+      z-index: 2;
+      display: none;
+    }
+
+    /* 留言输入框 */
+    .message-box input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* 留言框按钮 */
+    .message-box .btn {
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn.cancel {
+      background-color: #f44336;
+      color: #fff;
+    }
+
+    .btn.submit {
+      background-color: #4CAF50;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-
   <!-- 视频背景 -->
   <video class="video-bg" autoplay muted loop>
     <source src="https://videos.pexels.com/video-files/13725809/13725809-uhd_2560_1440_25fps.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- 中央文字 -->
+  <!-- 中央内容 -->
   <div class="container">
     <h1 class="title">Kakarrrotto PM</h1>
+    <button class="button" id="about-btn">了解网页用途</button>
+    <button class="button" id="message-btn">给我留言</button>
   </div>
 
+  <!-- 提示框 -->
+  <div class="modal" id="about-modal">
+    <p>本网站用于 Kakarrrotto PM 文档存放地</p>
+  </div>
+
+  <!-- 留言框 -->
+  <div class="message-box" id="message-box">
+    <input type="text" id="message-input" placeholder="请输入留言内容">
+    <div>
+      <button class="btn cancel" id="cancel-btn">取消</button>
+      <button class="btn submit" id="submit-btn">确认提交</button>
+    </div>
+  </div>
+
+  <!-- 背景遮罩 -->
+  <div class="overlay" id="overlay"></div>
+
+  <script>
+    // 弹出和关闭提示框
+    const aboutButton = document.getElementById('about-btn');
+    const modal = document.getElementById('about-modal');
+    const overlay = document.getElementById('overlay');
+
+    aboutButton.addEventListener('click', () => {
+      modal.style.display = 'block';
+      overlay.style.display = 'block';
+    });
+
+    overlay.addEventListener('click', () => {
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+
+    // 留言功能
+    const messageButton = document.getElementById('message-btn');
+    const messageBox = document.getElementById('message-box');
+    const cancelButton = document.getElementById('cancel-btn');
+    const submitButton = document.getElementById('submit-btn');
+    const messageInput = document.getElementById('message-input');
+
+    messageButton.addEventListener('click', () => {
+      messageBox.style.display = 'block';
+    });
+
+    cancelButton.addEventListener('click', () => {
+      messageBox.style.display = 'none';
+      messageInput.value = '';
+    });
+
+    submitButton.addEventListener('click', async () => {
+      const message = messageInput.value;
+      if (message.trim() === '') {
+        alert('请输入留言内容！');
+        return;
+      }
+
+      // 将留言发送到后端
+      try {
+        await fetch('http://goku.comw.cc/houduan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: message })
+        });
+        alert('留言已提交！');
+        messageInput.value = '';
+        messageBox.style.display = 'none';
+      } catch (error) {
+        alert('提交留言失败，请重试！');
+      }
+    });
+  </script>
 </body>
 </html>
